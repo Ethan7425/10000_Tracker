@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-
-<canvas id="confettiCanvas"></canvas>
-<script src="https://cdn.jsdelivr.net/npm/confetti-js"></script>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,8 +15,8 @@
         <button onclick="resetGame()">Réinitialiser Joueurs</button>
     </div>
     
-    <input type="number" id="customScore" placeholder="Enter custom score">
-    <!-- <button onclick="addCustomScore()">Add Score</button> -->
+    <!-- <input type="number" id="customScore" placeholder="Enter custom score"> -->
+    <input id="customScore" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="Enter score">
     <button onclick="endTurn()">Fin du Tour</button>
     
     <div class="container">

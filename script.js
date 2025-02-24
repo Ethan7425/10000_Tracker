@@ -108,6 +108,6 @@ function updateCurrentScore(score) {
 // Load existing players from localStorage when the page loads
 updateLeaderboard();
 
-// Set input type for mobile-friendly number pad
-document.getElementById("customScore").setAttribute("inputmode", "numeric");
-document.getElementById("customScore").setAttribute("pattern", "[0-9]*");
+// // Set input type for mobile-friendly number pad
+// document.getElementById("customScore").setAttribute("inputmode", "numeric");
+// document.getElementById("customScore").setAttribute("pattern", "[0-9]*");
