@@ -84,9 +84,15 @@ function updateLeaderboard() {
     playerList.innerHTML = "";
     leaderboard.innerHTML = "";
 
-    players.forEach((player) => {
+    players.forEach((player, index) => {
         let playerItem = document.createElement("li");
         playerItem.textContent = `${player.name}: ${player.score}`;
+        
+        if (index === currentPlayerIndex) {
+            playerItem.classList.add("current-turn");
+            playerItem.textContent += " (Playing)";
+        }
+
         playerList.appendChild(playerItem);
 
         let leaderboardItem = document.createElement("li");
@@ -101,3 +107,7 @@ function updateCurrentScore(score) {
 
 // Load existing players from localStorage when the page loads
 updateLeaderboard();
+
+// Set input type for mobile-friendly number pad
+document.getElementById("customScore").setAttribute("inputmode", "numeric");
+document.getElementById("customScore").setAttribute("pattern", "[0-9]*");
