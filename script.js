@@ -44,6 +44,11 @@ function endTurn() {
     let player = players[currentPlayerIndex];
     player.score += currentScore;
 
+    // Check if the player has won
+    if (player.score >= 10000) {
+        showWinPopup(player.name);
+    }
+
     // Check for score catch-up rule
     for (let i = 0; i < players.length; i++) {
         if (i !== currentPlayerIndex && players[i].score === player.score) {
@@ -59,6 +64,18 @@ function endTurn() {
     document.getElementById("customScore").value = "";
 }
 
+function showWinPopup(winnerName) {
+    alert(`${winnerName} wins the game! 🎉`);
+    triggerConfetti();
+}
+
+function triggerConfetti() {
+    const confettiSettings = { target: 'confettiCanvas' };
+    const confetti = new ConfettiGenerator(confettiSettings);
+    confetti.render();
+    setTimeout(() => confetti.clear(), 3000);
+}
+
 function updateLeaderboard() {
     players.sort((a, b) => b.score - a.score);
     let playerList = document.getElementById("playerList");
@@ -67,21 +84,14 @@ function updateLeaderboard() {
     playerList.innerHTML = "";
     leaderboard.innerHTML = "";
 
-    players.forEach((player, index) => {
-        let li = document.createElement("li");
-        li.textContent = `${player.name}: ${player.score}`;
+    players.forEach((player) => {
+        let playerItem = document.createElement("li");
+        playerItem.textContent = `${player.name}: ${player.score}`;
+        playerList.appendChild(playerItem);
 
-        if (index === currentPlayerIndex) {
-            li.classList.add("current-turn");
-            li.textContent += " (Playing)";
-        } else if (index === (currentPlayerIndex + 1) % players.length) {
-            li.classList.add("next-turn");
-            li.textContent += " (Next)";
-        }
-
-        let liClone = li.cloneNode(true);
-        playerList.appendChild(liClone);
-        leaderboard.appendChild(li);
+        let leaderboardItem = document.createElement("li");
+        leaderboardItem.textContent = `${player.name}: ${player.score}`;
+        leaderboard.appendChild(leaderboardItem);
     });
 }
 

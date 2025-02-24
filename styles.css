@@ -13,7 +13,7 @@ body {
     max-width: 900px;
     margin: auto;
     padding: 30px;
-    background: #34495e;
+    background: #3b566e;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
@@ -21,42 +21,42 @@ body {
 .player-section, .leaderboard {
     width: 45%;
     padding: 20px;
-    background: #3b566e;
+    background: #2c3e50;
     border-radius: 8px;
     text-align: left;
     color: #ecf0f1;
-    font-size: 1.2em;
+    font-size: 1.3em;
 }
 
 h1, h2 {
     color: #ecf0f1;
-    font-size: 2em;
+    font-size: 2.2em;
 }
 
 button {
-    background: #1abc9c;
+    background: #576574;
     color: white;
     border: none;
     padding: 15px;
     margin: 15px;
     cursor: pointer;
     border-radius: 8px;
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-weight: bold;
 }
 
 button:hover {
-    background: #16a085;
+    background: #1e2d3b;
 }
 
 input {
     padding: 12px;
-    border: 2px solid #95a5a6;
+    border: 2px solid #576574;
     border-radius: 8px;
     margin-bottom: 20px;
-    font-size: 1.2em;
-    background: #ecf0f1;
-    color: #2c3e50;
+    font-size: 1.3em;
+    background: #3b566e;
+    color: #ecf0f1;
 }
 
 .player-list {
@@ -64,15 +64,19 @@ input {
     padding: 0;
 }
 
+#players { 
+    font-size: 1.4em;
+}
+
 .current-turn {
     font-weight: bold;
-    color: #e74c3c;
-    font-size: 2em;
+    color: #f1c40f;
+    font-size: 1.8em;
     text-transform: uppercase;
 }
 
 .next-turn {
     font-weight: bold;
-    color: #e67e22;
-    font-size: 1.4em;
+    color: #bdc3c7;
+    font-size: 1.5em;
 }
