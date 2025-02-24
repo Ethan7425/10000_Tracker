@@ -27,7 +27,7 @@ function resetGame() {
 
 function addCustomScore() {
     let points = parseInt(document.getElementById("customScore").value);
-    if (!isNaN(points) && points > 0) {
+    if (!isNaN(points)) { // Allow zero points as well
         currentScore += points;
         updateCurrentScore(currentScore);
     }
@@ -37,7 +37,7 @@ function endTurn() {
     if (players.length === 0) return;
 
     let points = parseInt(document.getElementById("customScore").value);
-    if (!isNaN(points) && points > 0) {
+    if (!isNaN(points)) { // Allow zero points as well
         currentScore += points;
     }
 
@@ -109,13 +109,13 @@ function updateCurrentScore(score) {
 updateLeaderboard();
 
 // Custom numeric keypad
-function openNumberPad() {
-    document.getElementById("numberPad").style.display = "flex";
-}
+// function openNumberPad() {
+//     document.getElementById("numberPad").style.display = "flex";
+// }
 
-function closeNumberPad() {
-    document.getElementById("numberPad").style.display = "none";
-}
+// function closeNumberPad() {
+//     document.getElementById("numberPad").style.display = "none";
+// }
 
 function appendNumber(num) {
     let input = document.getElementById("customScore");
