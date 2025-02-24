@@ -60,7 +60,6 @@ function endTurn() {
     currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
     saveToLocalStorage();
     updateLeaderboard();
-    updateCurrentScore(0);
     document.getElementById("customScore").value = "";
 }
 
@@ -90,7 +89,7 @@ function updateLeaderboard() {
         
         if (index === currentPlayerIndex) {
             playerItem.classList.add("current-turn");
-            playerItem.textContent += " (Playing)";
+            playerItem.textContent += " (Joueur)";
         }
 
         playerList.appendChild(playerItem);
