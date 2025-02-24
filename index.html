@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10,000 Dice Game Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>10,000 Dice Game Tracker</h1>
+    
+    <div>
+        <input type="text" id="playerName" placeholder="Enter player name">
+        <button onclick="addPlayer()">Add Player</button>
+        <button onclick="resetGame()">Reset Players</button>
+    </div>
+    
+    <input type="number" id="customScore" placeholder="Enter custom score">
+    <button onclick="addCustomScore()">Add Score</button>
+    <button onclick="endTurn()">End Turn</button>
+    
+    <div class="container">
+        <div class="player-section">
+            <h2>Players</h2>
+            <ul id="playerList" class="player-list"></ul>
+        </div>
+        <div class="leaderboard">
+            <h2>Leaderboard</h2>
+            <ul id="players" class="player-list"></ul>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
