@@ -108,6 +108,23 @@ function updateCurrentScore(score) {
 // Load existing players from localStorage when the page loads
 updateLeaderboard();
 
-// // Set input type for mobile-friendly number pad
-// document.getElementById("customScore").setAttribute("inputmode", "numeric");
-// document.getElementById("customScore").setAttribute("pattern", "[0-9]*");
+// Custom numeric keypad
+function openNumberPad() {
+    document.getElementById("numberPad").style.display = "flex";
+}
+
+function closeNumberPad() {
+    document.getElementById("numberPad").style.display = "none";
+}
+
+function appendNumber(num) {
+    let input = document.getElementById("customScore");
+    input.value += num;
+}
+
+function deleteNumber() {
+    let input = document.getElementById("customScore");
+    input.value = input.value.slice(0, -1);
+}
+
+document.getElementById("customScore").addEventListener("focus", openNumberPad);

@@ -29,6 +29,31 @@
             <ul id="players" class="player-list"></ul>
         </div>
     </div>
+
+
+    <div id="numberPad" style="display: none; flex-direction: column; position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); background: #2c3e50; padding: 10px; border-radius: 10px;">
+        <div style="display: flex; justify-content: space-between;">
+            <button onclick="appendNumber(1)">1</button>
+            <button onclick="appendNumber(2)">2</button>
+            <button onclick="appendNumber(3)">3</button>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <button onclick="appendNumber(4)">4</button>
+            <button onclick="appendNumber(5)">5</button>
+            <button onclick="appendNumber(6)">6</button>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <button onclick="appendNumber(7)">7</button>
+            <button onclick="appendNumber(8)">8</button>
+            <button onclick="appendNumber(9)">9</button>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <button onclick="deleteNumber()">⌫</button>
+            <button onclick="appendNumber(0)">0</button>
+            <button onclick="closeNumberPad()">✔</button>
+        </div>
+    </div>
+    
     
     <script src="script.js"></script>
 </body>
