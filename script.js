@@ -22,8 +22,20 @@ function loadPlayers() {
 
 document.addEventListener("DOMContentLoaded", loadPlayers);
 
+function confirmResetGame() {
+    if (confirm("Are you sure you want to reset all players and scores? This cannot be undone.")) {
+        resetGame();
+    }
+}
+
+function confirmResetScores() {
+    if (confirm("Are you sure you want to reset all scores?")) {
+        resetScores();
+    }
+}
+
 function resetGame() {
-    localStorage.removeItem("players"); // Clear players from local storage
+    localStorage.removeItem("players");
     localStorage.removeItem("currentPlayerIndex");
     localStorage.removeItem("currentScore");
     players = [];
@@ -33,11 +45,18 @@ function resetGame() {
     updateLeaderboard();
 }
 
+function resetScores() {
+    players.forEach(player => player.score = 0);
+    localStorage.setItem("players", JSON.stringify(players));
+    updatePlayerList();
+    updateLeaderboard();
+}
+
 function endTurn() {
     if (players.length === 0) return;
 
     let points = parseInt(document.getElementById("customScore").value);
-    if (!isNaN(points)) { // Allow zero points as well
+    if (!isNaN(points)) {
         currentScore += points;
     }
 
@@ -50,17 +69,16 @@ function endTurn() {
     }
 
     // Check for score catch-up rule
-// Check for score catch-up rule
     for (let i = 0; i < players.length; i++) {
-        if (i !== currentPlayerIndex && players[i].score === player.score) {
+        if (i !== currentPlayerIndex && players[i].score === player.score && players[i].score > 0) {
             alert(`${player.name} a rayé ${players[i].name} !`);
             players[i].score = 0;
-        }
+        }        
     }
     currentScore = 0;
     currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
     saveToLocalStorage();
-    updatePlayerList(); // Keep player order unchanged
+    updatePlayerList();
     updateLeaderboard();
     
     // Clear the custom score field
@@ -78,7 +96,8 @@ function updatePlayerList() {
         let playerItem = document.createElement("li");
         let playerInfo = document.createElement("span");
         playerInfo.className = "player-info";
-        playerInfo.textContent = `${player.name}: ${player.score}`;
+        playerInfo.textContent = `${player.name}`;
+        // playerInfo.textContent = `${player.name}: ${player.score}`;
         
         if (index === currentPlayerIndex) {
             playerItem.classList.add("current-turn");
@@ -114,9 +133,12 @@ function updateLeaderboard() {
     leaderboard.innerHTML = "";
     
     let sortedPlayers = [...players].sort((a, b) => b.score - a.score);
-    sortedPlayers.forEach(player => {
+    let medals = ["🥇", "🥈", "🥉"];
+    
+    sortedPlayers.forEach((player, index) => {
         let leaderboardItem = document.createElement("li");
-        leaderboardItem.textContent = `${player.name}: ${player.score}`;
+        let medal = index < 3 ? medals[index] + " " : "";
+        leaderboardItem.textContent = `${medal}${player.name}: ${player.score}`;
         leaderboard.appendChild(leaderboardItem);
     });
 }
@@ -156,5 +178,36 @@ function movePlayerDown(index) {
         [players[index], players[index + 1]] = [players[index + 1], players[index]];
         saveToLocalStorage();
         updatePlayerList();
+    }
+}
+
+function showWinPopup(winnerName) {
+    let sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+    let medals = ["🥇", "🥈", "🥉"];
+    let top3 = sortedPlayers.slice(0, 3).map((player, index) => `${medals[index] || ''} ${player.name}: ${player.score}`).join("\n");
+    
+    let popup = document.createElement("div");
+    popup.id = "winPopup";
+    popup.innerHTML = `
+        <div class="popup-content">
+            <h2>🎉 ${winnerName} Wins! 🎉</h2>
+            <p>Top 3 Players:</p>
+            <pre>${top3}</pre>
+            <button onclick="closeWinPopup()">OK</button>
+        </div>
+    `;
+    popup.classList.add("popup");
+    document.body.appendChild(popup);
+    
+    setTimeout(() => {
+        popup.classList.add("show");
+    }, 100);
+}
+
+function closeWinPopup() {
+    let popup = document.getElementById("winPopup");
+    if (popup) {
+        popup.classList.remove("show");
+        setTimeout(() => popup.remove(), 300);
     }
 }
