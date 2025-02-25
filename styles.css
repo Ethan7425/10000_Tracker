@@ -64,54 +64,65 @@ input {
     padding: 0;
 }
 
-#players { 
-    font-size: 1.4em;
+.player-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.player-list .player-info {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.player-list .player-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+    min-width: 100px;
+}
+
+.player-list button {
+    font-size: 0.8em;
+    padding: 3px 6px;
+    margin: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+.player-list button:hover {
+    color: #f1c40f;
+}
+
+#players {
+    font-size: 1.2em;
 }
 
 .current-turn {
     font-weight: bold;
     color: #f1c40f;
-    font-size: 1.8em;
+    font-size: 1.4em;
     text-transform: uppercase;
 }
 
-.next-turn {
-    font-weight: bold;
-    color: #bdc3c7;
-    font-size: 1.5em;
-}
-
-
-/* body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #2c3e50;
-    color: #ecf0f1;
-    margin: 0;
-    padding: 30px;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 900px;
-    margin: auto;
-    padding: 30px;
-    background: #3b566e;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-}
-
 #numberPad {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     margin-top: 20px;
     background: #34495e;
     padding: 20px;
     border-radius: 10px;
+    width: 220px;
+    margin: auto;
 }
 
 #numberPad button {
@@ -129,16 +140,10 @@ input {
     background: #16a085;
 }
 
-#currentScore {
-    font-size: 2em;
-    font-weight: bold;
-    margin: 20px 0;
-}
-
 button.delete {
     background: #e74c3c !important;
 }
 
 button.delete:hover {
     background: #c0392b !important;
-} */
+}

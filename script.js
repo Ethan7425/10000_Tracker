@@ -1,36 +1,36 @@
 let players = JSON.parse(localStorage.getItem("players")) || [];
-let currentPlayerIndex = 0;
-let currentScore = 0;
+if (!Array.isArray(players)) players = [];
+let currentPlayerIndex = JSON.parse(localStorage.getItem("currentPlayerIndex")) || 0;
+let currentScore = JSON.parse(localStorage.getItem("currentScore")) || 0;
 
 function saveToLocalStorage() {
     localStorage.setItem("players", JSON.stringify(players));
+    localStorage.setItem("currentPlayerIndex", JSON.stringify(currentPlayerIndex));
+    localStorage.setItem("currentScore", JSON.stringify(currentScore));
 }
 
-function addPlayer() {
-    let name = document.getElementById("playerName").value.trim();
-    if (name) {
-        players.push({ name, score: 0 });
-        document.getElementById("playerName").value = "";
-        saveToLocalStorage();
-        updateLeaderboard();
+function loadPlayers() {
+    let storedPlayers = JSON.parse(localStorage.getItem("players"));
+    if (Array.isArray(storedPlayers)) {
+        players = storedPlayers;
     }
+    currentPlayerIndex = JSON.parse(localStorage.getItem("currentPlayerIndex")) || 0;
+    currentScore = JSON.parse(localStorage.getItem("currentScore")) || 0;
+    updatePlayerList();
+    updateLeaderboard();
 }
+
+document.addEventListener("DOMContentLoaded", loadPlayers);
 
 function resetGame() {
+    localStorage.removeItem("players"); // Clear players from local storage
+    localStorage.removeItem("currentPlayerIndex");
+    localStorage.removeItem("currentScore");
     players = [];
     currentPlayerIndex = 0;
     currentScore = 0;
-    localStorage.removeItem("players");
+    updatePlayerList();
     updateLeaderboard();
-    updateCurrentScore(0);
-}
-
-function addCustomScore() {
-    let points = parseInt(document.getElementById("customScore").value);
-    if (!isNaN(points)) { // Allow zero points as well
-        currentScore += points;
-        updateCurrentScore(currentScore);
-    }
 }
 
 function endTurn() {
@@ -50,80 +50,111 @@ function endTurn() {
     }
 
     // Check for score catch-up rule
+// Check for score catch-up rule
     for (let i = 0; i < players.length; i++) {
         if (i !== currentPlayerIndex && players[i].score === player.score) {
+            alert(`${player.name} a rayé ${players[i].name} !`);
             players[i].score = 0;
         }
     }
-
     currentScore = 0;
     currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
     saveToLocalStorage();
+    updatePlayerList(); // Keep player order unchanged
     updateLeaderboard();
-    document.getElementById("customScore").value = "";
+    
+    // Clear the custom score field
+    let customScoreField = document.getElementById("customScore");
+    if (customScoreField) {
+        customScoreField.value = "";
+    }
 }
 
-function showWinPopup(winnerName) {
-    alert(`${winnerName} wins the game! 🎉`);
-    triggerConfetti();
-}
-
-function triggerConfetti() {
-    const confettiSettings = { target: 'confettiCanvas' };
-    const confetti = new ConfettiGenerator(confettiSettings);
-    confetti.render();
-    setTimeout(() => confetti.clear(), 3000);
-}
-
-function updateLeaderboard() {
-    players.sort((a, b) => b.score - a.score);
+function updatePlayerList() {
     let playerList = document.getElementById("playerList");
-    let leaderboard = document.getElementById("players");
-
     playerList.innerHTML = "";
-    leaderboard.innerHTML = "";
 
     players.forEach((player, index) => {
         let playerItem = document.createElement("li");
-        playerItem.textContent = `${player.name}: ${player.score}`;
+        let playerInfo = document.createElement("span");
+        playerInfo.className = "player-info";
+        playerInfo.textContent = `${player.name}: ${player.score}`;
         
         if (index === currentPlayerIndex) {
             playerItem.classList.add("current-turn");
-            playerItem.textContent += " (Joueur)";
         }
 
-        playerList.appendChild(playerItem);
+        let buttonContainer = document.createElement("span");
+        buttonContainer.className = "player-buttons";
 
+        let removeButton = document.createElement("button");
+        removeButton.textContent = "❌";
+        removeButton.onclick = () => removePlayer(index);
+        
+        let upButton = document.createElement("button");
+        upButton.textContent = "⬆";
+        upButton.onclick = () => movePlayerUp(index);
+        
+        let downButton = document.createElement("button");
+        downButton.textContent = "⬇";
+        downButton.onclick = () => movePlayerDown(index);
+        
+        buttonContainer.appendChild(upButton);
+        buttonContainer.appendChild(downButton);
+        buttonContainer.appendChild(removeButton);
+        
+        playerItem.appendChild(playerInfo);
+        playerItem.appendChild(buttonContainer);
+        playerList.appendChild(playerItem);
+    });
+}
+
+function updateLeaderboard() {
+    let leaderboard = document.getElementById("players");
+    leaderboard.innerHTML = "";
+    
+    let sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+    sortedPlayers.forEach(player => {
         let leaderboardItem = document.createElement("li");
         leaderboardItem.textContent = `${player.name}: ${player.score}`;
         leaderboard.appendChild(leaderboardItem);
     });
 }
 
-function updateCurrentScore(score) {
-    document.getElementById("currentScore").textContent = score;
+function removePlayer(index) {
+    players.splice(index, 1);
+    if (currentPlayerIndex >= players.length) {
+        currentPlayerIndex = 0;
+    }
+    saveToLocalStorage();
+    updatePlayerList();
+    updateLeaderboard();
 }
 
-// Load existing players from localStorage when the page loads
-updateLeaderboard();
-
-// Custom numeric keypad
-// function openNumberPad() {
-//     document.getElementById("numberPad").style.display = "flex";
-// }
-
-// function closeNumberPad() {
-//     document.getElementById("numberPad").style.display = "none";
-// }
-
-function appendNumber(num) {
-    let input = document.getElementById("customScore");
-    input.value += num;
+function addPlayer() {
+    let playerNameInput = document.getElementById("playerName");
+    let name = playerNameInput.value.trim();
+    if (name) {
+        players.push({ name, score: 0 });
+        playerNameInput.value = "";
+        saveToLocalStorage();
+        updatePlayerList();
+        updateLeaderboard();
+    }
 }
 
-function deleteNumber() {
-    let input = document.getElementById("customScore");
-    input.value = input.value.slice(0, -1);
+function movePlayerUp(index) {
+    if (index > 0) {
+        [players[index], players[index - 1]] = [players[index - 1], players[index]];
+        saveToLocalStorage();
+        updatePlayerList();
+    }
 }
 
-document.getElementById("customScore").addEventListener("focus", openNumberPad);
+function movePlayerDown(index) {
+    if (index < players.length - 1) {
+        [players[index], players[index + 1]] = [players[index + 1], players[index]];
+        saveToLocalStorage();
+        updatePlayerList();
+    }
+}
